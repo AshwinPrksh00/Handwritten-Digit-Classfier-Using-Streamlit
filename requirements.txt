@@ -1,7 +1,7 @@
 pandas
 numpy
 streamlit
-tensorflow.keras.models
-plotly.express
+tensorflow
+plotly
 streamlit_drawable_canvas
 PIL
