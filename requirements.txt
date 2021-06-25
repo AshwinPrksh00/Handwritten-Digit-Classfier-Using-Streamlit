@@ -1,0 +1,7 @@
+pandas
+numpy
+streamlit
+tensorflow.keras.models
+plotly.express
+streamlit_drawable_canvas
+PIL
