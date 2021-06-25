@@ -4,4 +4,4 @@ streamlit
 tensorflow
 plotly
 streamlit_drawable_canvas
-PIL
+pillow
