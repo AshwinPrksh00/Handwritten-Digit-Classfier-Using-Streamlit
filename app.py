@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.express as px
 import numpy as np
 from tensorflow.keras.models import load_model
+import tensorflow as tf
 
 st.set_page_config(page_title= 'Handwritten Digit Classifier',
                    page_icon= "https://cdn.iconscout.com/icon/premium/png-256-thumb/digits-359823.png")
@@ -26,8 +27,9 @@ def chart(val):
 
 br(1)
 # Loading the pre-trained MNIST Model
-
-model = load_model('model')
+model = {}
+model['session'] = tf.compat.v1.Session()
+model['model']= load_model('model2.h5')
 
 # Creating a drawing canvas
 
@@ -37,7 +39,7 @@ bg_color = "#000000"
 drawing_mode = "freedraw"
 realtime_update = True
 
-k1,k2 = st.beta_columns([0.4,1])
+k1,k2 = st.columns([0.4,1])
 
   # Create a canvas component
 with k2:
@@ -57,12 +59,14 @@ with k2:
     if data.image_data is not None:
         st.image(data.image_data)
         img = Image.fromarray(data.image_data.astype("uint8"), mode="RGBA")
-        img_red = np.array(img.resize((28,28),Image.ANTIALIAS).convert('L'))
-        img_red = img_red.flatten().reshape(1,28,28,1)
+        img_red = np.array(img.resize((28,28),Image.ANTIALIAS).convert('L'))/255
+        img_red = img_red.reshape(-1,1,28,28)
 
     if st.button('Predict'):
         br(2)
-        val = model.predict(img_red)
+        val = []
+        with model['session'].as_default():
+            val = model['model'].predict(img_red)
         st.markdown("***Result***")
         st.markdown(f"<div style='background-color: grey; height: 70px; width: 70px; border-radius: 5px; padding-top: 5px; padding-bottom: 10px; margin-left: 150px; text-align: center;'> <label style='font-weight: bold; color: white; font-size: 35px;'>{np.argmax(val[0])}</label></div>",unsafe_allow_html=True)
         st.markdown("<br><br>***Model Prediction Chart***",unsafe_allow_html=True)
